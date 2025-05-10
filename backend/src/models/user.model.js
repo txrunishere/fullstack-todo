@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model } from "mongoose";
 
 const userSchema = new Schema(
   {
@@ -10,16 +10,22 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique: true
+      unique: true,
     },
     password: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
+    todo: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Todo",
+      },
+    ],
   },
   {
-    timestamps: true
+    timestamps: true,
   }
-)
+);
 
-export const User = model("User", userSchema)
+export const User = model("User", userSchema);
