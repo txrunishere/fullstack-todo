@@ -1,6 +1,8 @@
+import RouterProvider from "./routes/RouterProvider"
+
 const App = () => {
   return (
-    <div>App</div>
+    <RouterProvider />
   )
 }
 
