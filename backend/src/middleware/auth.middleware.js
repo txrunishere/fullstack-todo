@@ -12,7 +12,7 @@ export const verifyAuth = expressAsyncHandler(async (req, res, next) => {
   
     const encryptedToken = await jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
   
-    const user = await User.findById(encryptedToken._id).select("-password")
+    const user = await User.findById(encryptedToken._id).select("-password").populate("todo")
 
     req.user = user
 
