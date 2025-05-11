@@ -1,7 +1,7 @@
 import { useId, useState } from "react";
-import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
+import { usePostData } from "../hooks/usePostData";
 
 const RegisterPage = () => {
   const id = useId();
@@ -19,20 +19,16 @@ const RegisterPage = () => {
     }
 
     try {
-      const data = await axios.post(
-        "/server/user/register",
-        {
-          name,
-          email,
-          password,
-        }
-      );
+      const data = await usePostData("/server/user/register", {
+        name,
+        email,
+        password
+      })
       toast.success(data.data.message)
       navigate('/')
     } catch (error) {
       const errorMsg = error.response?.data?.error
       toast.error(errorMsg)
-
       if (typeof errorMsg === "object") {
         errorMsg.forEach(e => {
           toast.error(e)
