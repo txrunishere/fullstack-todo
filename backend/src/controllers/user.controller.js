@@ -117,4 +117,10 @@ const handleGetUser = asyncHandler(async (req, res) => {
   )
 });
 
-export { handleUserRegister, handleUserLogin, handleGetUser };
+const handleGetUsersTodo = asyncHandler(async (req, res) => {
+  return res.status(200).json({
+    todos: req.user?.todo
+  })
+})
+
+export { handleUserRegister, handleUserLogin, handleGetUser, handleGetUsersTodo };
