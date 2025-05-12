@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Spinner from "../components/Spinner";
+import { toast } from 'react-toastify'
 import axios from "axios";
 
 const TodoPage = () => {
@@ -30,12 +31,31 @@ const TodoPage = () => {
       const data = await axios.post("/server/todo/create-todo", {
         todo: todoValue,
       });
-      console.log("Data", data);
     } catch (error) {
       console.log("Err", error);
     }
     window.location.reload()
   };
+
+  const handleDeleteTodo = async (todoId) => {
+    try {
+      const res = await axios.delete(`/server/todo/delete/${todoId}`)
+      toast.success(res.data.message)
+    } catch (error) {
+      toast.error(error.message || "Something went wrong while deleting todo")
+    }
+    window.location.reload()
+  }
+
+  const handleTodoCompleted = async (todoId) => {
+    try {
+      const res = await axios.patch(`/server/todo/complete/${todoId}`)
+      toast.success(res.data.message)
+    } catch (error) {
+      toast.error(error.message || "Something went wrong while mark todo as completed")
+    }
+    window.location.reload()
+  }
 
   return (
     <div>
@@ -55,16 +75,21 @@ const TodoPage = () => {
           Add
         </button>
       </div>
-      <div className="w-[400px] h-[300px] flex flex-wrap flex-col gap-3 p-4 border overflow-x-hidden overflow-scroll ">
+      <div className="w-[400px] h-[300px] flex flex-col gap-3 p-4 border overflow-x-hidden overflow-scroll ">
         {isLoading ? <Spinner /> : null}
         {todos.map((todo) => (
           <div key={todo._id} className="flex justify-between mx-3">
-            <p>{todo.todo}</p>
+            <p className={`${todo.isCompleted ? "line-through" : ''}`}>{todo.todo}</p>
             <div className="flex gap-2">
-              <button className="cursor-pointer rounded-2xl border px-4 py-1">
+              <button
+                className="cursor-pointer rounded-2xl border px-4 py-1"
+                onClick={() => handleDeleteTodo(todo._id)}
+              >
                 Delete
               </button>
-              <button className="cursor-pointer rounded-2xl border px-4 py-1">
+              <button
+                onClick={() => handleTodoCompleted(todo._id)}
+                className={`cursor-pointer rounded-2xl border px-4 py-1 ${todo.isCompleted ? "hidden": "inline"}`}>
                 Complete
               </button>
             </div>
